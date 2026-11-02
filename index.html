@@ -1,0 +1,565 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BioStep Analytics</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar" id="sidebar">
+      <div class="logo">
+        <span class="logo-icon">B+</span>
+        <div>
+          <b>BioStep</b>
+          <small>ANALYTICS</small>
+        </div>
+      </div>
+
+      <p class="menu-label">MENÚ PRINCIPAL</p>
+
+      <nav>
+        <button class="nav active" data-page="inicio">
+          ⌂ &nbsp; Panel principal
+        </button>
+        <button class="nav" data-page="pisada">
+          ◉ &nbsp; Análisis de pisada
+        </button>
+        <button class="nav" data-page="actividad">
+          ◷ &nbsp; Actividad física
+        </button>
+        <button class="nav" data-page="modelos">
+          ∑ &nbsp; Modelos matemáticos
+        </button>
+        <button class="nav" data-page="alertas">
+          ♧ &nbsp; Alertas e historial
+        </button>
+        <button class="nav" data-page="ajustes">
+          ⚙ &nbsp; Configuración
+        </button>
+      </nav>
+
+      <div class="side-note">
+        ● PROTOTIPO EDUCATIVO
+        <small>
+          Datos y sensores simulados, sin conexión Bluetooth.
+        </small>
+      </div>
+    </aside>
+
+    <div class="workspace">
+      <header class="topbar">
+        <button id="menuBtn" class="menu-btn">☰</button>
+        <strong id="currentTitle">Panel principal</strong>
+
+        <div class="top-right">
+          <span class="pill">● MODO DEMO</span>
+          <button id="topToggle" class="btn btn-primary">
+            ▶ Iniciar
+          </button>
+        </div>
+      </header>
+
+      <main>
+
+        <!-- INTERFAZ 1: INICIO -->
+        <section id="inicio" class="view active">
+          <div class="heading">
+            <div>
+              <p class="eyebrow">RESUMEN GENERAL</p>
+              <h1>Tu bienestar comienza con cada paso.</h1>
+              <p>
+                Monitorea tu actividad y descubre cómo se
+                distribuye la presión de tus pies.
+              </p>
+            </div>
+          </div>
+
+          <div class="hero">
+            <div>
+              <span>TECNOLOGÍA Y SALUD</span>
+              <h2>BioStep Analytics</h2>
+              <p>
+                Plantillas inteligentes para analizar la pisada,
+                el equilibrio y la fatiga mediante
+                ecuaciones diferenciales.
+              </p>
+              <button class="btn btn-white" data-page="pisada">
+                Explorar sensores →
+              </button>
+            </div>
+            <div class="hero-symbol">◎</div>
+          </div>
+
+          <div class="stats">
+            <article class="card stat">
+              <span>👟 Pasos</span>
+              <strong id="sSteps">0</strong>
+              <small>En esta sesión</small>
+            </article>
+
+            <article class="card stat">
+              <span>🔥 Calorías</span>
+              <strong>
+                <span id="sCalories">0.0</span>
+                <em>kcal</em>
+              </strong>
+              <small>Estimación simulada</small>
+            </article>
+
+            <article class="card stat">
+              <span>⚖ Equilibrio</span>
+              <strong>
+                <span id="sBalance">100</span><em>%</em>
+              </strong>
+              <small>Distribución plantar</small>
+            </article>
+
+            <article class="card stat">
+              <span>◈ Estrés S</span>
+              <strong id="sStress">0.000</strong>
+              <small>Índice matemático</small>
+            </article>
+          </div>
+
+          <div class="columns">
+            <article class="card">
+              <div class="card-head">
+                <div>
+                  <h3>Evolución de la fatiga</h3>
+                  <p>Modelo diferencial en tiempo simulado</p>
+                </div>
+                <span class="chip">En vivo</span>
+              </div>
+              <canvas id="chartHome" width="700" height="260"></canvas>
+            </article>
+
+            <article class="card">
+              <div class="card-head">
+                <div>
+                  <h3>Balance de presión</h3>
+                  <p>Carga entre ambos pies</p>
+                </div>
+              </div>
+
+              <div class="balance-values">
+                <div>
+                  <small>IZQUIERDO</small>
+                  <strong id="homeLeft">50%</strong>
+                </div>
+                <div>
+                  <small>DERECHO</small>
+                  <strong id="homeRight">50%</strong>
+                </div>
+              </div>
+
+              <div class="balance-bar">
+                <div id="homeBar"></div>
+              </div>
+
+              <div class="info" id="homeMessage">
+                Inicia la simulación para ver lecturas.
+              </div>
+
+              <button class="btn btn-outline block" data-page="pisada">
+                Ver análisis completo →
+              </button>
+            </article>
+          </div>
+        </section>
+
+        <!-- INTERFAZ 2: PISADA -->
+        <section id="pisada" class="view">
+          <div class="heading">
+            <div>
+              <p class="eyebrow">SENSORES DE PRESIÓN</p>
+              <h1>Análisis de pisada</h1>
+              <p>
+                Visualización interactiva de la presión
+                plantar simulada.
+              </p>
+            </div>
+          </div>
+
+          <div class="card controls">
+            <label for="scenario">
+              Selecciona una situación:
+              <select id="scenario">
+                <option value="normal">Caminata normal</option>
+                <option value="izquierda">Sobrecarga izquierda</option>
+                <option value="derecha">Sobrecarga derecha</option>
+                <option value="intenso">Ejercicio intenso</option>
+                <option value="descanso">Descanso</option>
+              </select>
+            </label>
+
+            <div>
+              <button class="btn btn-primary" id="startBtn">
+                ▶ Iniciar simulación
+              </button>
+              <button class="btn btn-outline" id="resetBtn">
+                ↺ Reiniciar
+              </button>
+            </div>
+          </div>
+
+          <div class="columns">
+            <article class="card">
+              <div class="card-head">
+                <div>
+                  <h3>Mapa de sensores FSR</h3>
+                  <p>Tres sensores virtuales por pie</p>
+                </div>
+              </div>
+
+              <div class="feet">
+                <div class="foot-box">
+                  <small>PIE IZQUIERDO</small>
+                  <div class="foot foot-left">
+                    <i class="sensor toe" data-sensor="0"></i>
+                    <i class="sensor middle" data-sensor="1"></i>
+                    <i class="sensor heel" data-sensor="2"></i>
+                  </div>
+                  <strong id="footLeft">50%</strong>
+                </div>
+
+                <div class="foot-box">
+                  <small>PIE DERECHO</small>
+                  <div class="foot foot-right">
+                    <i class="sensor toe" data-sensor="3"></i>
+                    <i class="sensor middle" data-sensor="4"></i>
+                    <i class="sensor heel" data-sensor="5"></i>
+                  </div>
+                  <strong id="footRight">50%</strong>
+                </div>
+              </div>
+
+              <p class="legend">
+                🟢 Baja &nbsp; 🟡 Media &nbsp; 🔴 Alta presión
+              </p>
+            </article>
+
+            <article class="card">
+              <div class="card-head">
+                <div>
+                  <h3>Resultados de la pisada</h3>
+                  <p>Valores calculados en la simulación</p>
+                </div>
+              </div>
+
+              <div class="readings">
+                <p>
+                  Asimetría
+                  <strong id="asymmetry">0%</strong>
+                </p>
+                <p>
+                  Presión relativa P
+                  <strong id="pressure">0.45</strong>
+                </p>
+                <p>
+                  Cadencia
+                  <strong id="cadence">0 pasos/min</strong>
+                </p>
+                <p>
+                  Estado
+                  <strong id="walkingState" class="good">Normal</strong>
+                </p>
+              </div>
+
+              <div class="info" id="footAdvice">
+                La distribución está equilibrada.
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <!-- INTERFAZ 3: ACTIVIDAD -->
+        <section id="actividad" class="view">
+          <div class="heading">
+            <div>
+              <p class="eyebrow">ACTIVIDAD Y RENDIMIENTO</p>
+              <h1>Actividad física</h1>
+              <p>
+                Registro de pasos, distancia, tiempo
+                y calorías estimadas.
+              </p>
+            </div>
+          </div>
+
+          <div class="stats">
+            <article class="card stat">
+              <span>Pasos realizados</span>
+              <strong id="aSteps">0</strong>
+            </article>
+            <article class="card stat">
+              <span>Distancia</span>
+              <strong>
+                <span id="aDistance">0.00</span>
+                <em>km</em>
+              </strong>
+            </article>
+            <article class="card stat">
+              <span>Calorías</span>
+              <strong>
+                <span id="aCalories">0.0</span>
+                <em>kcal</em>
+              </strong>
+            </article>
+            <article class="card stat">
+              <span>Duración virtual</span>
+              <strong id="aTime">00:00</strong>
+            </article>
+          </div>
+
+          <div class="columns">
+            <article class="card">
+              <h3>Meta diaria de pasos</h3>
+              <p class="muted" id="goalText">0 / 6000 pasos</p>
+              <div class="progress">
+                <div id="goalBar"></div>
+              </div>
+              <p id="goalPercent">0% completado</p>
+            </article>
+
+            <article class="card">
+              <h3>Control de sesión</h3>
+              <p class="muted" id="sessionStatus">
+                La simulación está detenida.
+              </p>
+
+              <button class="btn btn-primary" id="activityToggle">
+                ▶ Iniciar sesión
+              </button>
+              <button class="btn btn-outline" id="activityReset">
+                Reiniciar
+              </button>
+
+              <p class="hint">
+                Cada segundo real representa diez segundos simulados.
+              </p>
+            </article>
+          </div>
+        </section>
+
+        <!-- INTERFAZ 4: ECUACIONES DIFERENCIALES -->
+        <section id="modelos" class="view">
+          <div class="heading">
+            <div>
+              <p class="eyebrow">
+                CÁLCULO INTEGRAL Y ECUACIONES DIFERENCIALES
+              </p>
+              <h1>Modelos matemáticos</h1>
+              <p>
+                Simulación numérica basada en las ecuaciones
+                del proyecto.
+              </p>
+            </div>
+          </div>
+
+          <div class="columns">
+            <article class="card formula">
+              <span>MODELO 1 · ESTRÉS POSTURAL</span>
+              <h2>
+                dS/dt = α |P − P<sub>ideal</sub>| − βS
+              </h2>
+              <p>
+                Un desvío en la pisada incrementa el estrés;
+                la recuperación natural lo reduce.
+              </p>
+              <strong id="mStress">0.000</strong>
+              <small>Índice de estrés S</small>
+            </article>
+
+            <article class="card formula">
+              <span>MODELO 2 · RECUPERACIÓN MUSCULAR</span>
+              <h2>
+                dF/dt = r(1 − F) − cP
+              </h2>
+              <p>
+                La frescura muscular disminuye bajo carga
+                y se recupera durante el descanso.
+              </p>
+              <strong id="mFresh">1.000</strong>
+              <small>Frescura F (de 0 a 1)</small>
+            </article>
+          </div>
+
+          <article class="card">
+            <div class="card-head">
+              <div>
+                <h3>Gráfico de los modelos</h3>
+                <p>Aproximación mediante el método de Euler</p>
+              </div>
+            </div>
+
+            <canvas id="chartModel" width="700" height="260"></canvas>
+
+            <p class="hint">
+              Siguiente valor = valor actual + Δt × derivada.
+              Los coeficientes son demostrativos, no médicos.
+            </p>
+          </article>
+        </section>
+
+        <!-- INTERFAZ 5: ALERTAS -->
+        <section id="alertas" class="view">
+          <div class="heading">
+            <div>
+              <p class="eyebrow">PREVENCIÓN</p>
+              <h1>Alertas e historial</h1>
+              <p>
+                Eventos por sobrecarga y mediciones registradas.
+              </p>
+            </div>
+
+            <button id="downloadBtn" class="btn btn-primary">
+              ↓ Exportar CSV
+            </button>
+          </div>
+
+          <div class="columns">
+            <article class="card">
+              <div class="card-head">
+                <h3>Alertas detectadas</h3>
+                <button class="link-btn" id="clearAlerts">
+                  Borrar alertas
+                </button>
+              </div>
+
+              <div id="alertList" class="alert-list">
+                <p class="muted">Todavía no hay alertas.</p>
+              </div>
+            </article>
+
+            <article class="card">
+              <h3>Estado actual</h3>
+              <div class="readings">
+                <p>Alertas <strong id="alertCount">0</strong></p>
+                <p>Estrés <strong id="alertStress">0.000</strong></p>
+                <p>Frescura <strong id="alertFresh">1.000</strong></p>
+                <p>Situación <strong id="alertStatus">Normal</strong></p>
+              </div>
+            </article>
+          </div>
+
+          <article class="card">
+            <h3>Últimas mediciones</h3>
+
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Tiempo</th>
+                    <th>Escenario</th>
+                    <th>Izq.</th>
+                    <th>Der.</th>
+                    <th>Estrés S</th>
+                    <th>Frescura F</th>
+                  </tr>
+                </thead>
+
+                <tbody id="historyTable">
+                  <tr>
+                    <td colspan="6">Aún no hay datos.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </article>
+        </section>
+
+        <!-- INTERFAZ 6: AJUSTES -->
+        <section id="ajustes" class="view">
+          <div class="heading">
+            <div>
+              <p class="eyebrow">PERSONALIZACIÓN</p>
+              <h1>Configuración</h1>
+              <p>
+                Modifica los parámetros físicos
+                y matemáticos de la demostración.
+              </p>
+            </div>
+          </div>
+
+          <form id="settingsForm" class="card settings">
+            <label>
+              Peso (kg)
+              <input id="weightInput" type="number"
+                     min="30" max="250" required>
+            </label>
+
+            <label>
+              Longitud de paso (cm)
+              <input id="strideInput" type="number"
+                     min="30" max="150" required>
+            </label>
+
+            <label>
+              Meta de pasos
+              <input id="goalInput" type="number"
+                     min="100" max="50000" required>
+            </label>
+
+            <label>
+              α · Impacto
+              <input id="alphaInput" type="number"
+                     min="0.01" max="3" step="0.01" required>
+            </label>
+
+            <label>
+              β · Recuperación del estrés
+              <input id="betaInput" type="number"
+                     min="0.01" max="3" step="0.01" required>
+            </label>
+
+            <label>
+              r · Recuperación muscular
+              <input id="rInput" type="number"
+                     min="0.01" max="3" step="0.01" required>
+            </label>
+
+            <label>
+              c · Desgaste muscular
+              <input id="cInput" type="number"
+                     min="0.01" max="3" step="0.01" required>
+            </label>
+
+            <label>
+              Umbral de alerta S
+              <input id="thresholdInput" type="number"
+                     min="0.1" max="2" step="0.05" required>
+            </label>
+
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">
+                Guardar cambios
+              </button>
+
+              <button type="button" class="btn btn-outline"
+                      id="defaultsBtn">
+                Valores iniciales
+              </button>
+            </div>
+          </form>
+
+          <div class="info">
+            ℹ Esta aplicación es un prototipo académico.
+            No detecta problemas reales de salud ni se
+            conecta a plantillas físicas.
+          </div>
+        </section>
+      </main>
+
+      <footer>
+        BioStep Analytics © 2026 ·
+        Prototipo académico · Datos simulados
+      </footer>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" role="status"></div>
+</body>
+</html>
